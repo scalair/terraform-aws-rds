@@ -32,8 +32,9 @@ module "rds" {
 
   port                 = var.port
   
-  backup_window        = var.backup_window
-  maintenance_window   = var.maintenance_window
+  backup_window           = var.backup_window
+  maintenance_window      = var.maintenance_window
+  backup_retention_period = var.backup_retention_period
   
   subnet_ids             = data.terraform_remote_state.vpc.outputs.private_subnets
   multi_az               = var.multi_az

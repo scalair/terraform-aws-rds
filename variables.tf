@@ -36,6 +36,12 @@ variable "port" {
   type        = string
 }
 
+variable "backup_retention_period" {
+  description = "The days to retain backups for"
+  type        = number
+  default     = 1
+}
+
 variable "backup_window" {
   description = "The daily time range (in UTC) during which automated backups are created if they are enabled. Example: '09:46-10:16'. Must not overlap with maintenance_window"
   type        = string
