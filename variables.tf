@@ -21,6 +21,18 @@ variable "allocated_storage" {
   type        = string
 }
 
+variable "allow_major_version_upgrade" {
+  description = "Indicates that major version upgrades are allowed"
+  type        = bool
+  default     = false
+}
+
+variable "auto_minor_version_upgrade" {
+  description = "Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window"
+  type        = bool
+  default     = false
+}
+
 variable "identifier" {
   description = "The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier"
   type        = string
@@ -68,6 +80,11 @@ variable "engine_version" {
   type        = string
 }
 
+variable "family" {
+  description = "The family to use for parameter group"
+  type        = string
+}
+
 variable "instance_class" {
   description = "The instance type of the RDS instance"
   type        = string
@@ -85,6 +102,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "allowed_public_ips" {
+  description = "List of public IPs/CIDR blocks that should be allowed access to RDS"
+  type        = list(string)
+  default     = []
+}
+
 # DB subnet group
 variable "subnet_ids" {
   description = "A list of VPC subnet IDs"
@@ -93,18 +116,6 @@ variable "subnet_ids" {
 }
 
 # DB parameter group
-variable "family" {
-  description = "The family of the DB parameter group"
-  type        = string
-  default     = ""
-}
-
-variable "major_engine_version" {
-  description = "Specifies the major version of the engine that this option group should be associated with"
-  type        = string
-  default     = ""
-}
-
 variable "multi_az" {
   description = "Specifies if the RDS instance is multi-AZ"
   type        = bool
