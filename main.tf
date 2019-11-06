@@ -3,14 +3,29 @@ resource "aws_security_group" "rds_sg" {
   description = "RDS security group"
   vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
 
-  ingress {
-    from_port   = var.port
-    to_port     = var.port
-    protocol    = "tcp"
-    cidr_blocks = data.terraform_remote_state.vpc.outputs.private_subnets_cidr_blocks
-  }
-
   tags = var.tags
+}
+
+resource "aws_security_group_rule" "private_ingress" {
+  security_group_id = aws_security_group.rds_sg.id
+
+  type        = "ingress"
+  from_port   = var.port
+  to_port     = var.port
+  protocol    = "tcp"
+  cidr_blocks = data.terraform_remote_state.vpc.outputs.private_subnets_cidr_blocks
+}
+
+resource "aws_security_group_rule" "public_ingress" {
+  security_group_id = aws_security_group.rds_sg.id
+
+  count = length(var.allowed_public_ips) > 0 ? 1 : 0
+
+  type        = "ingress"
+  from_port   = var.port
+  to_port     = var.port
+  protocol    = "tcp"
+  cidr_blocks = var.allowed_public_ips
 }
 
 module "rds" {
@@ -20,23 +35,27 @@ module "rds" {
   identifier           = var.identifier
   instance_class       = var.instance_class
   engine               = var.engine
-  family               = var.family
-  major_engine_version = var.major_engine_version
   engine_version       = var.engine_version
-  
-  allocated_storage    = var.allocated_storage
-  storage_encrypted    = var.storage_encrypted
+  family               = var.family
 
-  username             = data.vault_generic_secret.rds_credentials.data["username"]
-  password             = data.vault_generic_secret.rds_credentials.data["password"]
+  publicly_accessible  = length(var.allowed_public_ips) > 0
 
-  port                 = var.port
-  
+  auto_minor_version_upgrade  = var.auto_minor_version_upgrade
+  allow_major_version_upgrade = var.allow_major_version_upgrade
+
+  allocated_storage = var.allocated_storage
+  storage_encrypted = var.storage_encrypted
+
+  username = data.vault_generic_secret.rds_credentials.data["username"]
+  password = data.vault_generic_secret.rds_credentials.data["password"]
+
+  port = var.port
+
   backup_window           = var.backup_window
   maintenance_window      = var.maintenance_window
   backup_retention_period = var.backup_retention_period
-  
-  subnet_ids             = data.terraform_remote_state.vpc.outputs.private_subnets
+
+  subnet_ids             = data.terraform_remote_state.vpc.outputs.public_subnets
   multi_az               = var.multi_az
   vpc_security_group_ids = list(aws_security_group.rds_sg.id)
 
