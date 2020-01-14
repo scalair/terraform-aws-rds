@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0 - 2020-01-14
+### Changed
+- Update terraform-aws-rds module to v2.13.0
+- Update aws and vault providers to latest minor versions
+
 ## v1.1.0 - 2019-11-06
 ### Changed
 - Allow public access with whitelisting
