@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "public_ingress" {
 }
 
 module "rds" {
-  source = "github.com/terraform-aws-modules/terraform-aws-rds?ref=v2.5.0"
+  source = "github.com/terraform-aws-modules/terraform-aws-rds?ref=v2.13.0"
 
   name                 = var.name
   identifier           = var.identifier
