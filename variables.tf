@@ -80,6 +80,11 @@ variable "engine_version" {
   type        = string
 }
 
+variable "major_engine_version" {
+  description = "The major engine version to use"
+  type        = string
+}
+
 variable "family" {
   description = "The family to use for parameter group"
   type        = string

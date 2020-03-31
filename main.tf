@@ -36,6 +36,7 @@ module "rds" {
   instance_class       = var.instance_class
   engine               = var.engine
   engine_version       = var.engine_version
+  major_engine_version = var.major_engine_version
   family               = var.family
 
   publicly_accessible  = length(var.allowed_public_ips) > 0
