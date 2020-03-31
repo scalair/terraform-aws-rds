@@ -134,3 +134,20 @@ variable "vpc_security_group_ids" {
   default     = []
 }
 
+variable "dns_alias" {
+  description = "Route 53 alias"
+  type        = string
+  default     = ""
+}
+
+variable "dns_ttl" {
+  description = "Route 53 TTL"
+  type        = string
+  default     = "300"
+}
+
+variable "route_53_zone_id" {
+  description = "Route 53 zone ID"
+  type        = string
+  default     = ""
+}

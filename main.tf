@@ -61,3 +61,13 @@ module "rds" {
 
   tags = var.tags
 }
+
+resource "aws_route53_record" "rds_record" {
+  count = var.dns_alias == "" ? 0 : 1
+
+  name    = var.dns_alias
+  ttl     = var.dns_ttl
+  zone_id = var.route_53_zone_id
+  type    = "CNAME"
+  records = [module.rds.this_db_instance_address]
+}
